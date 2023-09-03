@@ -1,0 +1,50 @@
+pairplot in seaborn
+
+all heatmap for the univariatee analyssis reasult
+
+
+Certainly! If you want to create separate tables for each variable with colored cells and all values from the `describe()` function, you can iterate through each column in your DataFrame and create individual tables using the `tabulate` function from the `tabulate` library. Here's how you can do it:
+
+First, make sure to install the `tabulate` library if you haven't already:
+
+```bash
+pip install tabulate
+```
+
+Now, you can use the following code:
+
+```python
+import pandas as pd
+from tabulate import tabulate
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Load your dataset into a DataFrame
+df = pd.read_csv('your_dataset.csv')
+
+# Calculate summary statistics for numeric variables
+summary_stats = df.describe()
+
+# Iterate through each column and create separate tables
+for col in summary_stats.columns:
+    col_table = summary_stats[[col]].transpose()
+    
+    # Create a colormap for the heatmap
+    cmap = sns.color_palette("coolwarm", as_cmap=True)
+    
+    # Plotting the heatmap for each variable
+    plt.figure(figsize=(5, 3))
+    sns.heatmap(col_table, annot=True, fmt=".2f", cmap=cmap, linewidths=.5)
+    plt.title(f"Summary Statistics for {col}")
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    
+    # Convert the table to a string using tabulate and print it
+    table_str = tabulate(col_table, tablefmt='grid')
+    print(f"Summary Statistics for {col}:\n{table_str}\n")
+    plt.show()
+```
+
+This code will generate separate tables and heatmaps for each numeric variable in your dataset. The `tabulate` function is used to format the tables, and the seaborn heatmap provides the colored visualization of the summary statistics.
+
+Please note that this approach assumes that you are interested in visualizing summary statistics for numeric variables. If you want to include categorical variables as well, you might need to adapt the approach to handle their statistics and visualizations appropriately.
